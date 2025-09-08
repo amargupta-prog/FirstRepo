@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "App" %></title>
+    # <title><%= content_for(:title) || "App" %></title>
+    <title>Competition Dashboard</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
@@ -14,9 +15,31 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+
+    <style>
+      body{font-family: system-ui, Roboto, Arial; padding:18px;}
+      table{border-collapse:collapse;width:100%}
+      th,td{border:1px solid #eee;padding:8px;vertical-align:top}
+      th{background:#f7f7f7}
+      .notice{background:#ecfdf5;padding:8px;border-radius:6px;margin-bottom:8px}
+      .alert{background:#fff1f2;padding:8px;border-radius:6px;margin-bottom:8px}
+    </style>
   </head>
 
   <body>
+    # <%= yield %>
+
+    <% flash.each do |k,v| %>
+      <div class="<%= k %>"><%= v %></div>
+    <% end %>
+
+    <nav>
+      <%= link_to 'Products', products_path %> |
+      <%= link_to 'Dashboard', dashboard_path %>
+    </nav>
+
+    <hr>
+
     <%= yield %>
   </body>
 </html>

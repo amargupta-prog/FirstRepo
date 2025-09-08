@@ -1,2 +1,43 @@
-<h1>Dashboard#index</h1>
-<p>Find me in app/views/dashboard/index.html.erb</p>
+<h1>Your Product vs Competition</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Comp 1</th>
+      <th>Comp 2</th>
+      <th>Comp 3</th>
+      <th>Comp 4</th>
+      <th>Comp 5</th>
+      <th>Comp 6</th>
+      <th>Comp 7</th>
+      <th>Comp 8</th>
+      <th>ICP</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @products.each do |p| %>
+      <% comps = p.competitor_products.order(:id).first(8) %>
+      <tr>
+        <td>
+          <strong><%= p.title %></strong><br>
+          <%= p.price.present? ? number_to_currency(p.price, unit: '₹') : '-' %>
+        </td>
+        <% 8.times do |i| %>
+          <% c = comps[i] %>
+          <td>
+            <% if c %>
+              <div><%= c.name %></div>
+              <div>ASIN: <%= c.asin || '-' %></div>
+              <div>₹ <%= c.latest_price || '-' %></div>
+              <div>⭐ <%= c.latest_rating || '-' %></div>
+            <% else %>
+              -
+            <% end %>
+          </td>
+        <% end %>
+        <td><%= p.icp || '-' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

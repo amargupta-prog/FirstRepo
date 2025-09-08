@@ -1,10 +1,47 @@
-<p style="color: green"><%= notice %></p>
+<h1><%= @product.title %></h1>
+<p><strong>ICP:</strong> <%= @product.icp || '-' %></p>
 
-<%= render @product %>
+<h2>Competitors</h2>
 
-<div>
-  <%= link_to "Edit this product", edit_product_path(@product) %> |
-  <%= link_to "Back to products", products_path %>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>ASIN</th>
+      <th>Latest Price</th>
+      <th>Rating</th>
+      <th>Last Checked</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @product.competitor_products.each do |c| %>
+      <tr>
+        <td><%= c.name %></td>
+        <td>
+          <%= form_with model: [@product, c], local: true do |f| %>
+            <%= f.text_field :asin, size: 14, placeholder: 'B0BYZZQSLZ' %>
+            <%= f.submit 'Save' %>
+          <% end %>
+        </td>
+        <td><%= c.latest_price.present? ? number_to_currency(c.latest_price, unit: '₹') : '-' %></td>
+        <td><%= c.latest_rating || '-' %></td>
+        <td><%= c.last_checked_at ? time_ago_in_words(c.last_checked_at) + ' ago' : '-' %></td>
+        <td>
+          <%= button_to 'Delete', product_competitor_product_path(@product, c), method: :delete, data: { confirm: 'Remove competitor?' } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
-  <%= button_to "Destroy this product", @product, method: :delete %>
+<div style="margin-top:12px">
+  <%= button_to 'Refresh Now', refresh_competitors_product_path(@product), method: :post %>
 </div>
+
+<h3 style="margin-top:18px">Add another competitor</h3>
+<%= form_with url: product_competitor_products_path(@product), local: true do |f| %>
+  <div><%= f.text_field :name, placeholder: 'Brand / Product Name' %></div>
+  <div style="margin-top:6px"><%= f.text_field :asin, placeholder: 'ASIN (optional)' %></div>
+  <div style="margin-top:6px"><%= f.submit 'Add' %></div>
+<% end %>

@@ -1,4 +1,4 @@
-class CreateCompetitorSnapshots < ActiveRecord::Migration[7.2]
+class CreateCompetitorSnapshots < ActiveRecord::Migration[7.1]
   def change
     create_table :competitor_snapshots do |t|
       t.references :competitor_product, null: false, foreign_key: true
@@ -10,3 +10,6 @@ class CreateCompetitorSnapshots < ActiveRecord::Migration[7.2]
     end
   end
 end
+
+# id | competitor_product_id | price | rating | captured_at | created_at | updated_at
+# ---+-----------------------+-------+--------+-------------+------------+-----------

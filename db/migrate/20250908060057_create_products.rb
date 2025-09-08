@@ -1,4 +1,4 @@
-class CreateProducts < ActiveRecord::Migration[7.2]
+class CreateProducts < ActiveRecord::Migration[7.1]
   def change
     create_table :products do |t|
       t.string :merchant_id
@@ -16,3 +16,6 @@ class CreateProducts < ActiveRecord::Migration[7.2]
     end
   end
 end
+
+# id | merchant_id | title       | price | currency | brand | gtin | mpn | link | image_link | icp | created_at | updated_at
+# ---+-------------+-------------+-------+----------+-------+------+-----+------+-------------+-----+------------+-----------

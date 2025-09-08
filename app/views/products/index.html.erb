@@ -1,16 +1,40 @@
-<p style="color: green"><%= notice %></p>
-
-<% content_for :title, "Products" %>
-
 <h1>Products</h1>
 
-<div id="products">
-  <% @products.each do |product| %>
-    <%= render product %>
-    <p>
-      <%= link_to "Show this product", product %>
-    </p>
+<details>
+  <summary>Import Google Merchant Feed</summary>
+  <%= form_with url: import_feed_products_path, local: true, multipart: true do |f| %>
+    <div>
+      <label>Feed URL</label><br>
+      <%= text_field_tag :feed_url, 'https://beta.myupchar.com/google_merchant_feed_own.tsv', size: 100 %>
+    </div>
+    <div>or</div>
+    <div>
+      <label>Upload TSV</label><br>
+      <%= file_field_tag :feed_file, accept: '.tsv,.txt' %>
+    </div>
+    <div style="margin-top:6px"><%= submit_tag 'Import' %></div>
   <% end %>
-</div>
+</details>
 
-<%= link_to "New product", new_product_path %>
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Price</th>
+      <th>Brand</th>
+      <th>ICP</th>
+      <th>Competitors</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @products.each do |p| %>
+      <tr>
+        <td><%= link_to p.title, product_path(p) %></td>
+        <td><%= p.price.present? ? number_to_currency(p.price, unit: '₹') : '-' %></td>
+        <td><%= p.brand || '-' %></td>
+        <td><%= p.icp.present? ? truncate(p.icp, length: 60) : '-' %></td>
+        <td><%= p.competitor_products.count %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

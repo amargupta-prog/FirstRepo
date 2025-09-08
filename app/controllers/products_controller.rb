@@ -1,70 +1,34 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: %i[ show edit update destroy ]
-
-  # GET /products or /products.json
   def index
-    @products = Product.all
+    @products = Product.includes(:competitor_product).order(:title)
   end
 
-  # GET /products/1 or /products/1.json
   def show
+    @product = Product.includes(:competitor_product).find(params[:id])
   end
 
-  # GET /products/new
-  def new
-    @product = Product.new
-  end
-
-  # GET /products/1/edit
-  def edit
-  end
-
-  # POST /products or /products.json
-  def create
-    @product = Product.new(product_params)
-
-    respond_to do |format|
-      if @product.save
-        format.html { redirect_to @product, notice: "Product was successfully created." }
-        format.json { render :show, status: :created, location: @product }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /products/1 or /products/1.json
-  def update
-    respond_to do |format|
-      if @product.update(product_params)
-        format.html { redirect_to @product, notice: "Product was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: @product }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /products/1 or /products/1.json
-  def destroy
-    @product.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to products_path, notice: "Product was successfully destroyed.", status: :see_other }
-      format.json { head :no_content }
-    end
-  end
-
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_product
-      @product = Product.find(params[:id])
+  def import_feed
+    if params[:feed_url].present?
+      body = HTTP.get(params[:feed_url]).to_s  #returns the response body as a string.
+      importer = GoogleMerchantFeedImporter.new(StringIO.new(body))
+      importer.call
+    elseif params[:feed_file].present?
+      importer = GoogleMerchantFeedImporter.new(params[:feed_file].tempfile)
+      importer.call
+    else
+      redirect_to products_path, alert: "Please provide a feed URL or upload a feed file." and return
     end
 
-    # Only allow a list of trusted parameters through.
-    def product_params
-      params.require(:product).permit(:merchant_id, :title, :price, :currency, :brand, :gtin, :mpn, :link, :image_link, :icp)
+    redirect_to products_path, notice: "Feed imported successfully."
+  rescue => e
+    redirect_to products_path, alert: "Failed to import feed: #{e.message}"
+  end       
+
+  def refresh_competitors
+    product = Product.find(params[:id])
+    product.competitor_product.find_each do |competitor|
+      FetchCompetitorDataJob.perform_later(competitor.id)
     end
+    redirect_to product_path(params[:id]), notice: "Refreshing competitor data in background."
+  end
 end
