@@ -1,0 +1,67 @@
+<%= form_with(model: product) do |form| %>
+  <% if product.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+      <ul>
+        <% product.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :merchant_id, style: "display: block" %>
+    <%= form.text_field :merchant_id %>
+  </div>
+
+  <div>
+    <%= form.label :title, style: "display: block" %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :price, style: "display: block" %>
+    <%= form.text_field :price %>
+  </div>
+
+  <div>
+    <%= form.label :currency, style: "display: block" %>
+    <%= form.text_field :currency %>
+  </div>
+
+  <div>
+    <%= form.label :brand, style: "display: block" %>
+    <%= form.text_field :brand %>
+  </div>
+
+  <div>
+    <%= form.label :gtin, style: "display: block" %>
+    <%= form.text_field :gtin %>
+  </div>
+
+  <div>
+    <%= form.label :mpn, style: "display: block" %>
+    <%= form.text_field :mpn %>
+  </div>
+
+  <div>
+    <%= form.label :link, style: "display: block" %>
+    <%= form.text_field :link %>
+  </div>
+
+  <div>
+    <%= form.label :image_link, style: "display: block" %>
+    <%= form.text_field :image_link %>
+  </div>
+
+  <div>
+    <%= form.label :icp, style: "display: block" %>
+    <%= form.text_area :icp %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

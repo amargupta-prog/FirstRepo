@@ -1,0 +1,25 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+
+development:
+  <<: *default
+  database: app_development
+  username: myupchar
+  password: myupchar@123
+  host: localhost
+
+test:
+  <<: *default
+  database: app_test
+  username: myupchar
+  password: myupchar@123
+  host: localhost
+
+production:
+  <<: *default
+  database: app_production
+  username: myupchar
+  password: <%= ENV['APP_DATABASE_PASSWORD'] %>
+  host: localhost

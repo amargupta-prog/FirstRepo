@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @competitor_product %>
+
+<div>
+  <%= link_to "Edit this competitor product", edit_competitor_product_path(@competitor_product) %> |
+  <%= link_to "Back to competitor products", competitor_products_path %>
+
+  <%= button_to "Destroy this competitor product", @competitor_product, method: :delete %>
+</div>

@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  product: one
+  name: MyString
+  platform: MyString
+  asin: MyString
+  latest_price: 9.99
+  latest_rating: 9.99
+  last_checked_at: 2025-09-08 11:37:03
+
+two:
+  product: two
+  name: MyString
+  platform: MyString
+  asin: MyString
+  latest_price: 9.99
+  latest_rating: 9.99
+  last_checked_at: 2025-09-08 11:37:03

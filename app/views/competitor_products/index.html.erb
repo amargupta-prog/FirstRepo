@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Competitor products" %>
+
+<h1>Competitor products</h1>
+
+<div id="competitor_products">
+  <% @competitor_products.each do |competitor_product| %>
+    <%= render competitor_product %>
+    <p>
+      <%= link_to "Show this competitor product", competitor_product %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New competitor product", new_competitor_product_path %>

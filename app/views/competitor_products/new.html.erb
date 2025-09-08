@@ -1,0 +1,11 @@
+<% content_for :title, "New competitor product" %>
+
+<h1>New competitor product</h1>
+
+<%= render "form", competitor_product: @competitor_product %>
+
+<br>
+
+<div>
+  <%= link_to "Back to competitor products", competitor_products_path %>
+</div>
