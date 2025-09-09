@@ -11,7 +11,6 @@ class AmazonPriceFetcher
     def self.fetch(asin)
         url = "#{AMAZON_HOST}/dp/#{asin}"
         res = HTTP.timeout(15).headers(HEADERS).get(url)
-
         unless res.status.success?
             Rails.logger.warn("Amazon HTTP status: #{res.status} for #{asin}")
             return { price: nil, rating: nil }

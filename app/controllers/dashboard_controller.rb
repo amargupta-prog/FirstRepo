@@ -1,5 +1,5 @@
 class DashboardController < ApplicationController
   def index
-    @products = Product.includes(:competitor_product).order(:title)
+    @products = Product.includes(:competitor_products).order(:title)
   end
 end

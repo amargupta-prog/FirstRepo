@@ -7,7 +7,9 @@
       <label>Feed URL</label><br>
       <%= text_field_tag :feed_url, 'https://beta.myupchar.com/google_merchant_feed_own.tsv', size: 100 %>
     </div>
+
     <div>or</div>
+
     <div>
       <label>Upload TSV</label><br>
       <%= file_field_tag :feed_file, accept: '.tsv,.txt' %>
@@ -26,6 +28,7 @@
       <th>Competitors</th>
     </tr>
   </thead>
+
   <tbody>
     <% @products.each do |p| %>
       <tr>
@@ -37,4 +40,5 @@
       </tr>
     <% end %>
   </tbody>
+
 </table>

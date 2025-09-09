@@ -4,7 +4,7 @@ class FetchCompetitorDataJob < ApplicationJob
   def perform(competitor_id)
     # Do something later
     competitor = CompetitorProduct.find_by(id: competitor_id)
-    return unless competitor.asin.present?
+    return unless competitor && competitor.asin.present?
 
     # data = fetch_data_from_api(competitor.asin)
     # return unless data

@@ -12,9 +12,10 @@
       <th>Comp 6</th>
       <th>Comp 7</th>
       <th>Comp 8</th>
-      <th>ICP</th>
+      <th>ICP(Ideal Customer Profile)</th>
     </tr>
   </thead>
+
   <tbody>
     <% @products.each do |p| %>
       <% comps = p.competitor_products.order(:id).first(8) %>
@@ -23,6 +24,7 @@
           <strong><%= p.title %></strong><br>
           <%= p.price.present? ? number_to_currency(p.price, unit: '₹') : '-' %>
         </td>
+
         <% 8.times do |i| %>
           <% c = comps[i] %>
           <td>
@@ -36,8 +38,10 @@
             <% end %>
           </td>
         <% end %>
+        
         <td><%= p.icp || '-' %></td>
       </tr>
     <% end %>
   </tbody>
+
 </table>

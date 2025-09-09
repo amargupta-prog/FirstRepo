@@ -1,7 +1,6 @@
 # app/models/product.rb
 class Product < ApplicationRecord
-    has_many :competitor_product, dependent: :destroy
-    validates :title, presence: true
+  # products have many competitor products
+  has_many :competitor_products, dependent: :destroy
+  validates :title, presence: true
 end
-
-

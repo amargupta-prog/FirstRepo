@@ -1,15 +1,12 @@
+begin
+  require 'sidekiq/web'
+rescue LoadError
+  # Sidekiq is not available
+end
+
 # config/routes.rb
 
-require 'sidekiq/web'   # <- move this to the top
-
 Rails.application.routes.draw do
-
-  # resources :products
-  # resources :competitor_products
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  
-
   # Health check endpoint
   get "up" => "rails/health#show", as: :rails_health_check
 
@@ -17,8 +14,22 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
-  get "dashboard/index"
-  root "products#index"
+  # Products + nested competitor products
+  resources :products, only: [:index, :show] do
+    # Import feed (POST with feed_url or feed_file)
+    post :import_feed, on: :collection
+
+    # Refresh competitor data for a single product (enqueues job for all competitors that have ASIN)
+    post :refresh_competitors, on: :member
+
+    # Nested CRUD for competitor products belonging to a product
+    resources :competitor_products, only: [:create, :update, :destroy]
+  end
+
+  # Dashboard view (your product vs competition)
+  get 'dashboard', to: 'dashboard#index', as: :dashboard
+
+  # root "products#index"
 
   # Sidekiq dashboard
   if Rails.env.development?

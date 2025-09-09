@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    # <title><%= content_for(:title) || "App" %></title>
-    <title>Competition Dashboard</title>
+    <title><%= content_for(:title) || "Competition Dashboard" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= yield :head %>
+    <%# yield :head %>
 
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="/icon.png" type="image/png">
@@ -24,15 +23,17 @@
       .notice{background:#ecfdf5;padding:8px;border-radius:6px;margin-bottom:8px}
       .alert{background:#fff1f2;padding:8px;border-radius:6px;margin-bottom:8px}
     </style>
+    
   </head>
 
   <body>
-    # <%= yield %>
+    <%# yield %>
 
     <% flash.each do |k,v| %>
       <div class="<%= k %>"><%= v %></div>
     <% end %>
 
+    <!-- navbar -->
     <nav>
       <%= link_to 'Products', products_path %> |
       <%= link_to 'Dashboard', dashboard_path %>

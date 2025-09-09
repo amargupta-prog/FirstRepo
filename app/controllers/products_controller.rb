@@ -1,10 +1,10 @@
 class ProductsController < ApplicationController
   def index
-    @products = Product.includes(:competitor_product).order(:title)
+    @products = Product.includes(:competitor_products).order(:title)
   end
 
   def show
-    @product = Product.includes(:competitor_product).find(params[:id])
+    @product = Product.includes(:competitor_products).find(params[:id])
   end
 
   def import_feed
@@ -26,9 +26,9 @@ class ProductsController < ApplicationController
 
   def refresh_competitors
     product = Product.find(params[:id])
-    product.competitor_product.find_each do |competitor|
-      FetchCompetitorDataJob.perform_later(competitor.id)
+    product.competitor_product.find_each do |comp|
+      FetchCompetitorDataJob.perform_later(comp.id)
     end
-    redirect_to product_path(params[:id]), notice: "Refreshing competitor data in background."
+    redirect_to product_path(product), notice: "Refreshing competitor data in background."
   end
 end

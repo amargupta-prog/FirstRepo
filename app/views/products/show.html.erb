@@ -14,6 +14,7 @@
       <th>Actions</th>
     </tr>
   </thead>
+
   <tbody>
     <% @product.competitor_products.each do |c| %>
       <tr>
@@ -40,6 +41,7 @@
 </div>
 
 <h3 style="margin-top:18px">Add another competitor</h3>
+
 <%= form_with url: product_competitor_products_path(@product), local: true do |f| %>
   <div><%= f.text_field :name, placeholder: 'Brand / Product Name' %></div>
   <div style="margin-top:6px"><%= f.text_field :asin, placeholder: 'ASIN (optional)' %></div>
