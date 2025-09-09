@@ -26,7 +26,7 @@ class ProductsController < ApplicationController
 
   def refresh_competitors
     product = Product.find(params[:id])
-    product.competitor_product.find_each do |comp|
+    product.competitor_products.find_each do |comp|
       FetchCompetitorDataJob.perform_later(comp.id)
     end
     redirect_to product_path(product), notice: "Refreshing competitor data in background."

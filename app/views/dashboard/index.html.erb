@@ -1,47 +1,41 @@
-<h1>Your Product vs Competition</h1>
+<h1 class="text-xl font-bold mb-6">Your Product vs Competition</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Product</th>
-      <th>Comp 1</th>
-      <th>Comp 2</th>
-      <th>Comp 3</th>
-      <th>Comp 4</th>
-      <th>Comp 5</th>
-      <th>Comp 6</th>
-      <th>Comp 7</th>
-      <th>Comp 8</th>
-      <th>ICP(Ideal Customer Profile)</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @products.each do |p| %>
-      <% comps = p.competitor_products.order(:id).first(8) %>
+<div class="overflow-x-auto bg-white rounded shadow">
+  <table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-100">
       <tr>
-        <td>
-          <strong><%= p.title %></strong><br>
-          <%= p.price.present? ? number_to_currency(p.price, unit: '₹') : '-' %>
-        </td>
-
+        <th class="px-4 py-2 text-left text-sm font-semibold">Product</th>
         <% 8.times do |i| %>
-          <% c = comps[i] %>
-          <td>
-            <% if c %>
-              <div><%= c.name %></div>
-              <div>ASIN: <%= c.asin || '-' %></div>
-              <div>₹ <%= c.latest_price || '-' %></div>
-              <div>⭐ <%= c.latest_rating || '-' %></div>
-            <% else %>
-              -
-            <% end %>
-          </td>
+          <th class="px-4 py-2 text-left text-sm font-semibold">Comp <%= i+1 %></th>
         <% end %>
-        
-        <td><%= p.icp || '-' %></td>
+        <th class="px-4 py-2 text-left text-sm font-semibold">ICP</th>
       </tr>
-    <% end %>
-  </tbody>
+    </thead>
+    <tbody class="divide-y divide-gray-100">
+      <% @products.each do |p| %>
+        <% comps = p.competitor_products.order(:id).first(8) %>
+        <tr>
+          <td class="px-4 py-2 font-medium text-green-700">
+            <div><%= p.title %></div>
+            <div class="text-sm text-gray-600"><%= p.price.present? ? number_to_currency(p.price, unit: '₹') : '-' %></div>
+          </td>
+          <% 8.times do |i| %>
+            <% c = comps[i] %>
+            <td class="px-4 py-2 text-sm">
+              <% if c %>
+                <div class="font-medium"><%= c.name %></div>
+                <div class="text-gray-600">ASIN: <%= c.asin || '-' %></div>
+                <div>₹ <%= c.latest_price || '-' %></div>
+                <div>⭐ <%= c.latest_rating || '-' %></div>
+              <% else %>
+                -
+              <% end %>
+            </td>
+          <% end %>
+          <td class="px-4 py-2 text-sm"><%= p.icp || '-' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
 
-</table>

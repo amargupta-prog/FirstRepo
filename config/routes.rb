@@ -1,10 +1,11 @@
+# config/routes.rb
+
 begin
   require 'sidekiq/web'
 rescue LoadError
   # Sidekiq is not available
 end
 
-# config/routes.rb
 
 Rails.application.routes.draw do
   # Health check endpoint
@@ -26,7 +27,7 @@ Rails.application.routes.draw do
     resources :competitor_products, only: [:create, :update, :destroy]
   end
 
-  # Dashboard view (your product vs competition)
+  # Dashboard view (myupchar product vs competition)
   get 'dashboard', to: 'dashboard#index', as: :dashboard
 
   # root "products#index"

@@ -1,44 +1,49 @@
-<h1>Products</h1>
+<h1 class="text-xl font-bold mb-4">Products</h1>
 
-<details>
-  <summary>Import Google Merchant Feed</summary>
-  <%= form_with url: import_feed_products_path, local: true, multipart: true do |f| %>
-    <div>
-      <label>Feed URL</label><br>
-      <%= text_field_tag :feed_url, 'https://beta.myupchar.com/google_merchant_feed_own.tsv', size: 100 %>
+<div class="bg-white p-4 rounded shadow mb-6">
+  <details>
+    <summary class="cursor-pointer font-semibold text-green-700">Import Google Merchant Feed</summary>
+    <div class="mt-4">
+      <%= form_with url: import_feed_products_path, local: true, multipart: true, class: "space-y-3" do |f| %>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Feed URL</label>
+          <%= text_field_tag :feed_url, 'https://beta.myupchar.com/google_merchant_feed_own.tsv',
+              class: "mt-1 block w-full border rounded px-3 py-2" %>
+        </div>
+        <div class="text-center text-gray-500">OR</div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Upload TSV</label>
+          <%= file_field_tag :feed_file, accept: '.tsv,.txt', class: "mt-1 block w-full" %>
+        </div>
+        <div>
+          <%= submit_tag 'Import', class: "px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700" %>
+        </div>
+      <% end %>
     </div>
+  </details>
+</div>
 
-    <div>or</div>
-
-    <div>
-      <label>Upload TSV</label><br>
-      <%= file_field_tag :feed_file, accept: '.tsv,.txt' %>
-    </div>
-    <div style="margin-top:6px"><%= submit_tag 'Import' %></div>
-  <% end %>
-</details>
-
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Price</th>
-      <th>Brand</th>
-      <th>ICP</th>
-      <th>Competitors</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @products.each do |p| %>
+<div class="overflow-x-auto">
+  <table class="min-w-full divide-y divide-gray-200 bg-white rounded shadow">
+    <thead class="bg-gray-100">
       <tr>
-        <td><%= link_to p.title, product_path(p) %></td>
-        <td><%= p.price.present? ? number_to_currency(p.price, unit: '₹') : '-' %></td>
-        <td><%= p.brand || '-' %></td>
-        <td><%= p.icp.present? ? truncate(p.icp, length: 60) : '-' %></td>
-        <td><%= p.competitor_products.count %></td>
+        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Title</th>
+        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Price</th>
+        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Brand</th>
+        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">ICP</th>
+        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Competitors</th>
       </tr>
-    <% end %>
-  </tbody>
-
-</table>
+    </thead>
+    <tbody class="divide-y divide-gray-100">
+      <% @products.each do |p| %>
+        <tr>
+          <td class="px-4 py-2 font-medium text-green-700"><%= link_to p.title, product_path(p) %></td>
+          <td class="px-4 py-2"><%= p.price.present? ? number_to_currency(p.price, unit: '₹') : '-' %></td>
+          <td class="px-4 py-2"><%= p.brand || '-' %></td>
+          <td class="px-4 py-2"><%= p.icp.present? ? truncate(p.icp, length: 60) : '-' %></td>
+          <td class="px-4 py-2"><%= p.competitor_products.count %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

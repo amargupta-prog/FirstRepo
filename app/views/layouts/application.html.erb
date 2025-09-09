@@ -24,23 +24,28 @@
       .alert{background:#fff1f2;padding:8px;border-radius:6px;margin-bottom:8px}
     </style>
     
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
 
-  <body>
-    <%# yield %>
+  <body class="bg-gray-50 text-gray-800 font-sans">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <!-- Navbar -->
+      <nav class="flex justify-between items-center py-4 border-b border-gray-200 mb-6">
+        <div class="text-2xl font-bold text-green-700">myUpchar Dashboard</div>
+        <div class="space-x-6">
+          <%= link_to 'Products', products_path, class: "text-gray-700 hover:text-green-700 font-medium" %>
+          <%= link_to 'Dashboard', dashboard_path, class: "text-gray-700 hover:text-green-700 font-medium" %>
+        </div>
+      </nav>
 
-    <% flash.each do |k,v| %>
-      <div class="<%= k %>"><%= v %></div>
-    <% end %>
+      <% flash.each do |key, message| %>
+        <div class="mb-4 p-3 rounded 
+          <%= key == 'notice' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
+          <%= message %>
+        </div>
+      <% end %>
 
-    <!-- navbar -->
-    <nav>
-      <%= link_to 'Products', products_path %> |
-      <%= link_to 'Dashboard', dashboard_path %>
-    </nav>
-
-    <hr>
-
-    <%= yield %>
+      <%= yield %>
+    </div>
   </body>
 </html>
