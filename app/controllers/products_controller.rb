@@ -8,11 +8,16 @@ class ProductsController < ApplicationController
   end
 
   def import_feed
+    # If someone opens this URL in browser (GET) — redirect to index where the Import form lives
+    # if request.get?
+    #   redirect_to products_path and return
+    # end
+
     if params[:feed_url].present?
-      body = HTTP.get(params[:feed_url]).to_s  #returns the response body as a string.
+      body = HTTP.get(params[:feed_url]).to_s    #returns the response body as a string.
       importer = GoogleMerchantFeedImporter.new(StringIO.new(body))
       importer.call
-    elseif params[:feed_file].present?
+    elsif params[:feed_file].present?
       importer = GoogleMerchantFeedImporter.new(params[:feed_file].tempfile)
       importer.call
     else

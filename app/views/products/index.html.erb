@@ -10,7 +10,9 @@
           <%= text_field_tag :feed_url, 'https://beta.myupchar.com/google_merchant_feed_own.tsv',
               class: "mt-1 block w-full border rounded px-3 py-2" %>
         </div>
+
         <div class="text-center text-gray-500">OR</div>
+        
         <div>
           <label class="block text-sm font-medium text-gray-700">Upload TSV</label>
           <%= file_field_tag :feed_file, accept: '.tsv,.txt', class: "mt-1 block w-full" %>
@@ -34,6 +36,7 @@
         <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Competitors</th>
       </tr>
     </thead>
+
     <tbody class="divide-y divide-gray-100">
       <% @products.each do |p| %>
         <tr>
@@ -45,5 +48,6 @@
         </tr>
       <% end %>
     </tbody>
+
   </table>
 </div>
