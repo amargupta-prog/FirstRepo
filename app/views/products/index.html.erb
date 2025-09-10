@@ -29,10 +29,15 @@
   <table class="min-w-full divide-y divide-gray-200 bg-white rounded shadow">
     <thead class="bg-gray-100">
       <tr>
+        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Image</th>
         <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Title</th>
         <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Price</th>
+        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Sale Price</th>
         <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Brand</th>
-        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">ICP</th>
+        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Category</th>
+        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Type</th>
+        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Availability</th>
+        <!--  <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">ICP</th> -->
         <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Competitors</th>
       </tr>
     </thead>
@@ -40,10 +45,25 @@
     <tbody class="divide-y divide-gray-100">
       <% @products.each do |p| %>
         <tr>
-          <td class="px-4 py-2 font-medium text-green-700"><%= link_to p.title, product_path(p) %></td>
+          <td class="px-4 py-2 ">
+            <% if p.image_link.present? %>
+              <div class="flex-shrink-0">
+                <img src="<%= p.image_link %>" alt="product_image" class="h-[8rem] border rounded ">
+              </div>
+            <% else %>
+              <span class="text-gray-400 text-sm">No image</span>
+            <% end %>
+          </td>
+          <td class="px-4 py-2 font-medium text-green-700">
+            <%= link_to p.title, product_path(p) %>
+          </td>
           <td class="px-4 py-2"><%= p.price.present? ? number_to_currency(p.price, unit: '₹') : '-' %></td>
+          <td class="px-4 py-2"><%= p.sale_price.present? ? number_to_currency(p.sale_price, unit: '₹') : '-' %></td>
           <td class="px-4 py-2"><%= p.brand || '-' %></td>
-          <td class="px-4 py-2"><%= p.icp.present? ? truncate(p.icp, length: 60) : '-' %></td>
+          <td class="px-4 py-2 text-sm text-gray-600"><%= p.google_product_category.to_s %></td>
+          <td class="px-4 py-2 text-sm text-gray-600"><%= p.product_type.to_s %></td>
+          <td class="px-4 py-2"><%= p.availability || '-' %></td>
+        <!--  <td class="px-4 py-2"><%= p.icp.present? ? truncate(p.icp, length: 40) : '-' %></td> -->
           <td class="px-4 py-2"><%= p.competitor_products.count %></td>
         </tr>
       <% end %>

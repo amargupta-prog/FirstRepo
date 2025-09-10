@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_09_08_060743) do
+ActiveRecord::Schema[7.1].define(version: 2025_09_10_104447) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -24,6 +24,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_08_060743) do
     t.datetime "last_checked_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "image_url"
     t.index ["product_id"], name: "index_competitor_products_on_product_id"
   end
 
@@ -50,6 +51,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_08_060743) do
     t.text "icp"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "description"
+    t.string "google_product_category"
+    t.string "product_type"
+    t.string "condition"
+    t.string "availability"
+    t.decimal "sale_price"
+    t.string "sale_price_effective_date"
+    t.text "shipping"
+    t.jsonb "additional_image_links"
   end
 
   add_foreign_key "competitor_products", "products"

@@ -13,7 +13,7 @@ Rails.application.routes.draw do
 
   # PWA support
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-  get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
+  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   # Products + nested competitor products
   resources :products, only: [:index, :show] do

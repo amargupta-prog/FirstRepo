@@ -24,7 +24,7 @@
             <td class="px-4 py-2 text-sm">
               <% if c %>
                 <div class="font-medium"><%= c.name %></div>
-                <div class="text-gray-600">ASIN: <%= c.asin || '-' %></div>
+              <!--  <div class="text-gray-600">ASIN: <%= c.asin || '-' %></div> -->
                 <div>₹ <%= c.latest_price || '-' %></div>
                 <div>⭐ <%= c.latest_rating || '-' %></div>
               <% else %>
@@ -32,7 +32,7 @@
               <% end %>
             </td>
           <% end %>
-          <td class="px-4 py-2 text-sm"><%= p.icp || '-' %></td>
+          <td class="px-2 py-2 text-sm"><%= p.icp || '-' %></td>
         </tr>
       <% end %>
     </tbody>

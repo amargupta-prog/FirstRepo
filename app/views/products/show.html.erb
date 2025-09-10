@@ -1,29 +1,68 @@
-<!-- app/views/products/show.html.erb (Tailwind-styled) -->
-<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+<!-- app/views/products/show.html.erb -->
+<div class=" mx-auto px-4 sm:px-6 lg:px-8 py-6">
+  <!-- Top section with image + title -->
   <div class="flex items-start justify-between mb-6">
-    <div>
-      <h1 class="text-2xl font-semibold text-gray-900"><%= @product.title %></h1>
-      <p class="mt-1 text-sm text-gray-600"><strong>ICP:</strong> <%= @product.icp || '-' %></p>
+    <div class="flex items-start space-x-6">
+      <!-- Main image -->
+      <% if @product.image_link.present? %>
+        <div class="flex-shrink-0">
+          <img src="<%= @product.image_link %>" alt="product_image" class="border rounded h-20 w-auto">
+        </div>
+      <% end %>
+
+      <!-- Title + ICP -->
+      <div>
+        <h1 class="text-xl font-semibold text-gray-900"><%= @product.title %></h1>
+        <p class="mt-1 text-sm text-gray-600"><strong>ICP:</strong> <%= @product.icp || '-' %></p>
+      </div>
     </div>
 
+    <!-- Buttons -->
     <div class="flex space-x-3">
       <%= button_to 'Refresh Now', refresh_competitors_product_path(@product),
             method: :post,
             class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700" %>
-      <%= link_to 'Back', products_path, class: "inline-flex items-center px-4 py-2 border border-gray-200 text-sm font-medium rounded-md bg-white text-gray-700 hover:bg-gray-50" %>
+      <%= link_to 'Back', products_path,
+            class: "inline-flex items-center px-4 py-2 border border-gray-200 text-sm font-medium rounded-md bg-white text-gray-700 hover:bg-gray-50" %>
     </div>
   </div>
 
+<!-- Product Details -->
+<div class="bg-white shadow rounded-lg overflow-hidden mb-6">
+  <div class="px-4 py-4 border-b border-gray-100">
+    <h2 class="text-lg font-medium text-gray-800">Product Details</h2>
+  </div>
+
+  <div class="px-4 py-4 space-y-2 text-sm text-gray-700">
+    <details class="mt-2">
+      <summary class="cursor-pointer text-green-700 font-medium">Show / Hide Product Details</summary>
+      <div class="mt-2 space-y-2 text-sm text-gray-700">
+        <p><strong>Description:</strong> <%= @product.description || '-' %></p>
+        <p><strong>Brand:</strong> <%= @product.brand || '-' %></p>
+        <p><strong>Category:</strong> <%= @product.google_product_category || '-' %></p>
+        <p><strong>Type:</strong> <%= @product.product_type || '-' %></p>
+        <p><strong>Condition:</strong> <%= @product.condition || '-' %></p>
+        <p><strong>Availability:</strong> <%= @product.availability || '-' %></p>
+        <p><strong>Price:</strong> <%= @product.price ? number_to_currency(@product.price, unit: '₹') : '-' %></p>
+        <p><strong>Sale Price:</strong> <%= @product.sale_price ? number_to_currency(@product.sale_price, unit: '₹') : '-' %></p>
+        <p><strong>Sale Price Effective Date:</strong> <%= @product.sale_price_effective_date || '-' %></p>
+        <p><strong>Shipping:</strong> <%= @product.shipping || '-' %></p>
+      </div>
+    </details>
+  </div>
+</div>
+
+  <!-- Competitors Table -->
   <div class="bg-white shadow rounded-lg overflow-hidden">
     <div class="px-4 py-4 border-b border-gray-100">
       <h2 class="text-lg font-medium text-gray-800">Competitors</h2>
     </div>
 
-    <!-- Responsive table container -->
     <div class="overflow-x-auto">
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
           <tr>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ASIN</th>
             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Latest Price</th>
@@ -32,37 +71,39 @@
             <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
-
+        
         <tbody class="bg-white divide-y divide-gray-100">
           <% @product.competitor_products.each do |c| %>
             <tr class="hover:bg-gray-50">
+              <td class=" whitespace-nowrap">
+                <% if c.image_url.present? %>
+                  <img src="<%= c.image_url %>" alt="<%= c.name %>" class="h-20 w-auto rounded border">
+                <% else %>
+                  <span class="text-gray-400">-</span>
+                <% end %>
+              </td>
               <td class="px-4 py-4 whitespace-nowrap">
                 <div class="text-sm font-medium text-gray-900"><%= c.name %></div>
                 <% if c.platform.present? %>
                   <div class="text-xs text-gray-500 mt-1">Platform: <%= c.platform.capitalize %></div>
                 <% end %>
               </td>
-
               <td class="px-4 py-4 whitespace-nowrap w-48">
                 <%= form_with model: [@product, c], local: true, class: "flex items-center space-x-2" do |f| %>
                   <%= f.text_field :asin, size: 14, placeholder: 'B0BYZZQSLZ',
-                        class: " border border-gray-200 rounded-md px-2 py-1 text-sm focus:ring-1 focus:ring-green-500 focus:border-green-500" %>
+                        class: "border border-gray-200 rounded-md px-2 py-1 text-sm focus:ring-1 focus:ring-green-500 focus:border-green-500" %>
                   <%= f.submit 'Save', class: "px-3 py-1 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700" %>
                 <% end %>
               </td>
-
               <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
                 <%= c.latest_price.present? ? number_with_precision(c.latest_price, precision: 2, delimiter: ',') : '-' %>
               </td>
-
               <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
                 <%= c.latest_rating.present? ? c.latest_rating.to_s : '-' %>
               </td>
-
               <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
                 <%= c.last_checked_at ? time_ago_in_words(c.last_checked_at) + ' ago' : '-' %>
               </td>
-
               <td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <%= button_to 'Delete', product_competitor_product_path(@product, c),
                       method: :delete,
@@ -78,20 +119,17 @@
     <!-- Add competitor form -->
     <div class="px-4 py-4 border-t border-gray-100 bg-gray-50">
       <h3 class="text-sm font-medium text-gray-800 mb-3">Add another competitor</h3>
-
       <%= form_with model: [@product, @product.competitor_products.build], local: true, class: "grid grid-cols-1 sm:grid-cols-3 gap-3" do |f| %>
         <div class="sm:col-span-1">
           <%= f.label :name, class: "block text-xs font-medium text-gray-600" %>
           <%= f.text_field :name, placeholder: 'Brand / Product Name',
                 class: "mt-1 block w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-1 focus:ring-green-500 focus:border-green-500" %>
         </div>
-
         <div class="sm:col-span-1">
           <%= f.label :asin, class: "block text-xs font-medium text-gray-600" %>
           <%= f.text_field :asin, placeholder: 'ASIN (optional)',
                 class: "mt-1 block w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:ring-1 focus:ring-green-500 focus:border-green-500" %>
         </div>
-
         <div class="sm:col-span-1 self-end">
           <%= f.submit 'Add', class: "w-full inline-flex justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700" %>
         </div>

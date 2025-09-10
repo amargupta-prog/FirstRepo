@@ -19,10 +19,11 @@ class AmazonPriceFetcher
         doc = Nokogiri::HTML(res.body.to_s)
         price = extract_price(doc)
         rating = extract_rating(doc)
-        { price: price, rating: rating }
+        image =  extract_image(doc)
+        { price: price, rating: rating, image: image }
     rescue => e
         Rails.logger.warn("Amazon fetch error for #{asin}: #{e.class} #{e.message}")
-        { price: nil, rating: nil }
+        { price: nil, rating: nil, image: nil }
     end
 
     def self.extract_price(doc)
@@ -52,18 +53,24 @@ class AmazonPriceFetcher
 
     def self.extract_rating(doc)
     # Common places for rating strings like "4.3 out of 5 stars"
-    candidates = [
-      doc.at_css('[data-hook="rating-out-of-text"]')&.text,
-      doc.at_css('i[data-hook="average-star-rating"] span')&.text,
-      doc.at_css('#averageCustomerReviews .a-icon-alt')&.text,
-      doc.at_css('.cr-vote .a-icon-alt')&.text
-    ].compact
+        candidates = [
+        doc.at_css('[data-hook="rating-out-of-text"]')&.text,
+        doc.at_css('i[data-hook="average-star-rating"] span')&.text,
+        doc.at_css('#averageCustomerReviews .a-icon-alt')&.text,
+        doc.at_css('.cr-vote .a-icon-alt')&.text
+        ].compact
 
-    text = candidates.find { |t| t.to_s =~ /[0-5](?:\.[0-9])?/ }
-    return nil unless text
+        text = candidates.find { |t| t.to_s =~ /[0-5](?:\.[0-9])?/ }
+        return nil unless text
 
-    m = text.to_s.match(/([0-5](?:\.[0-9])?)/)
-    m ? BigDecimal(m[1]) : nil
-  end
+        m = text.to_s.match(/([0-5](?:\.[0-9])?)/)
+        m ? BigDecimal(m[1]) : nil
+    end
+
+    def self.extract_image(doc)
+        doc.at_css('#landingImage')&.[]('src') ||
+        doc.at_css('#imgBlkFront')&.[]('src') ||
+        doc.at_css('#main-image-container img')&.[]('src')
+    end
   
 end
