@@ -8,7 +8,6 @@
         <% 8.times do |i| %>
           <th class="px-4 py-2 text-left text-sm font-semibold">Comp <%= i+1 %></th>
         <% end %>
-        <th class="px-4 py-2 text-left text-sm font-semibold">ICP</th>
       </tr>
     </thead>
     <tbody class="divide-y divide-gray-100">
@@ -32,7 +31,6 @@
               <% end %>
             </td>
           <% end %>
-          <td class="px-2 py-2 text-sm"><%= p.icp || '-' %></td>
         </tr>
       <% end %>
     </tbody>
