@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_09_10_104447) do
+ActiveRecord::Schema[7.1].define(version: 2025_09_10_120050) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -25,6 +25,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_10_104447) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "image_url"
+    t.boolean "amazons_choice"
     t.index ["product_id"], name: "index_competitor_products_on_product_id"
   end
 

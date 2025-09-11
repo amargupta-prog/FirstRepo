@@ -23,6 +23,9 @@
             <td class="px-4 py-2 text-sm">
               <% if c %>
                 <div class="font-medium"><%= c.name %></div>
+                  <% if c.amazons_choice %>
+                    <span title="Amazon's Choice" class="text-green-600">✔</span>
+                  <% end %>
               <!--  <div class="text-gray-600">ASIN: <%= c.asin || '-' %></div> -->
                 <div>₹ <%= c.latest_price || '-' %></div>
                 <div>⭐ <%= c.latest_rating || '-' %></div>

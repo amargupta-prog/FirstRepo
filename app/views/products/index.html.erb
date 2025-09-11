@@ -45,10 +45,10 @@
     <tbody class="divide-y divide-gray-100">
       <% @products.each do |p| %>
         <tr>
-          <td class="px-4 py-2 ">
+          <td class="">
             <% if p.image_link.present? %>
               <div class="flex-shrink-0">
-                <img src="<%= p.image_link %>" alt="product_image" class="h-[8rem] border rounded ">
+                <img src="<%= p.image_link %>" alt="product_image" class="h-[6rem] border rounded ">
               </div>
             <% else %>
               <span class="text-gray-400 text-sm">No image</span>

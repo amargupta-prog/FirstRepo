@@ -13,17 +13,18 @@ class AmazonPriceFetcher
         res = HTTP.timeout(15).headers(HEADERS).get(url)
         unless res.status.success?
             Rails.logger.warn("Amazon HTTP status: #{res.status} for #{asin}")
-            return { price: nil, rating: nil }
+            return { price: nil, rating: nil, image: nil, amazons_choice: false }
         end
 
         doc = Nokogiri::HTML(res.body.to_s)
         price = extract_price(doc)
         rating = extract_rating(doc)
         image =  extract_image(doc)
-        { price: price, rating: rating, image: image }
+        amazons_choice = extract_amazons_choice(doc)
+        { price: price, rating: rating, image: image, amazons_choice: amazons_choice }
     rescue => e
         Rails.logger.warn("Amazon fetch error for #{asin}: #{e.class} #{e.message}")
-        { price: nil, rating: nil, image: nil }
+        { price: nil, rating: nil, image: nil, amazons_choice: false }
     end
 
     def self.extract_price(doc)
@@ -71,6 +72,13 @@ class AmazonPriceFetcher
         doc.at_css('#landingImage')&.[]('src') ||
         doc.at_css('#imgBlkFront')&.[]('src') ||
         doc.at_css('#main-image-container img')&.[]('src')
+    end
+
+    def self.extract_amazons_choice(doc)
+        badge_texts = doc.css('span, div').map(&:text).uniq
+        Rails.logger.debug "Amazon badge candidates: #{badge_texts.grep(/amazon/i).take(10)}"
+        
+        badge_texts.any? { |t| t.to_s.downcase.include?("amazon's choice") }
     end
   
 end

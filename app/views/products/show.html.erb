@@ -77,17 +77,24 @@
             <tr class="hover:bg-gray-50">
               <td class=" whitespace-nowrap">
                 <% if c.image_url.present? %>
-                  <img src="<%= c.image_url %>" alt="<%= c.name %>" class="h-20 w-auto rounded border">
+                  <img src="<%= c.image_url %>" alt="<%= c.name %>" class="h-40 w-auto rounded border">
                 <% else %>
                   <span class="text-gray-400">-</span>
                 <% end %>
               </td>
+
               <td class="px-4 py-4 whitespace-nowrap">
-                <div class="text-sm font-medium text-gray-900"><%= c.name %></div>
+                <div class="flex items-center space-x-2">
+                  <div class="text-sm font-medium text-gray-900"><%= c.name %></div>
+                  <% if c.amazons_choice? %>
+                    <span title="Amazon's Choice" class="text-green-600 font-bold">✔</span>
+                  <% end %>
+                </div>
                 <% if c.platform.present? %>
                   <div class="text-xs text-gray-500 mt-1">Platform: <%= c.platform.capitalize %></div>
                 <% end %>
               </td>
+
               <td class="px-4 py-4 whitespace-nowrap w-48">
                 <%= form_with model: [@product, c], local: true, class: "flex items-center space-x-2" do |f| %>
                   <%= f.text_field :asin, size: 14, placeholder: 'B0BYZZQSLZ',
@@ -96,8 +103,21 @@
                 <% end %>
               </td>
               <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
-                <%= c.latest_price.present? ? number_with_precision(c.latest_price, precision: 2, delimiter: ',') : '-' %>
-              </td>
+  <% prices = c.competitor_snapshots.order(captured_at: :desc).limit(7) %>
+  <% if prices.any? %>
+    <ul class="space-y-1">
+      <% prices.each do |snap| %>
+        <li>
+          <%= number_to_currency(snap.price, unit: '₹') %>
+          <span class="text-xs text-gray-500">(<%= l(snap.captured_at, format: :short) %>)</span>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    -
+  <% end %>
+</td>
+
               <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
                 <%= c.latest_rating.present? ? c.latest_rating.to_s : '-' %>
               </td>

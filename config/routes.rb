@@ -30,7 +30,7 @@ Rails.application.routes.draw do
   # Dashboard view (myupchar product vs competition)
   get 'dashboard', to: 'dashboard#index', as: :dashboard
 
-  # root "products#index"
+  root "products#index"
 
   # Sidekiq dashboard
   if Rails.env.development?
