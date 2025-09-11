@@ -21,6 +21,9 @@ gem 'sidekiq'
 gem 'bootsnap', require: false
 gem 'tzinfo-data', platforms: %i[ mingw mswin x64_mingw jruby ]
 
+gem "chartkick"
+gem "groupdate"
+
 group :development, :test do
   gem 'pry'
   gem 'debug', platforms: %i[mri windows], require: 'debug/prelude'

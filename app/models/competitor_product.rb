@@ -3,8 +3,13 @@ class CompetitorProduct < ApplicationRecord
   belongs_to :product
   has_many :competitor_snapshots, dependent: :destroy
 
-  # Helper: last 4 snapshots ordered by time
-  def latest_price(limit = 7)
+  # Get only the most recent price
+  def latest_price_value
+    competitor_snapshots.order(captured_at: :desc).limit(1).pluck(:price).first
+  end
+
+  # If you still want last N prices for charts
+  def last_prices(limit = 10)
     competitor_snapshots.order(captured_at: :desc).limit(limit).pluck(:price)
   end
 

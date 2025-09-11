@@ -10,24 +10,41 @@
         <% end %>
       </tr>
     </thead>
+
     <tbody class="divide-y divide-gray-100">
       <% @products.each do |p| %>
         <% comps = p.competitor_products.order(:id).first(8) %>
         <tr>
+          <!--Product cell-->
           <td class="px-4 py-2 font-medium text-green-700">
-            <div><%= p.title %></div>
+            <div>
+              <%= link_to p.title, product_path(p), class: "hover:underline text-green-700" %>
+            </div>
             <div class="text-sm text-gray-600"><%= p.price.present? ? number_to_currency(p.price, unit: '₹') : '-' %></div>
           </td>
+
+          <!-- Competitor-->
           <% 8.times do |i| %>
             <% c = comps[i] %>
             <td class="px-4 py-2 text-sm">
               <% if c %>
-                <div class="font-medium"><%= c.name %></div>
+                <div class="font-medium">
+                  <% if c.asin.present? && (c.platform.blank? || c.platform == "amazon") %>
+                    <%= link_to c.name, "https://www.amazon.in/dp/#{c.asin}",
+                                target: "_blank", rel: "noopener",
+                                class: "hover:underline text-blue-600" %>
+                  <% else %>
+                    <%= c.name %>
+                  <% end %>
+                </div>
                   <% if c.amazons_choice %>
                     <span title="Amazon's Choice" class="text-green-600">✔</span>
                   <% end %>
               <!--  <div class="text-gray-600">ASIN: <%= c.asin || '-' %></div> -->
-                <div>₹ <%= c.latest_price || '-' %></div>
+                <!-- Only show latest price -->
+                <div>
+                  <%= c.latest_price_value.present? ? number_to_currency(c.latest_price_value, unit: '₹') : '-' %>
+                </div>
                 <div>⭐ <%= c.latest_rating || '-' %></div>
               <% else %>
                 -

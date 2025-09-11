@@ -85,7 +85,17 @@
 
               <td class="px-4 py-4 whitespace-nowrap">
                 <div class="flex items-center space-x-2">
-                  <div class="text-sm font-medium text-gray-900"><%= c.name %></div>
+                  <div class="text-sm font-medium text-gray-900">
+                <div class="font-medium">
+                  <% if c.asin.present? && (c.platform.blank? || c.platform == "amazon") %>
+                    <%= link_to c.name, "https://www.amazon.in/dp/#{c.asin}",
+                                target: "_blank", rel: "noopener",
+                                class: "hover:underline text-blue-600" %>
+                  <% else %>
+                    <%= c.name %>
+                  <% end %>
+                </div>
+                  </div>
                   <% if c.amazons_choice? %>
                     <span title="Amazon's Choice" class="text-green-600 font-bold">✔</span>
                   <% end %>

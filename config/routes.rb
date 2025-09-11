@@ -9,10 +9,9 @@ end
 
 Rails.application.routes.draw do
   # Health check endpoint
-  get "up" => "rails/health#show", as: :rails_health_check
-
+  # get "up" => "rails/health#show", as: :rails_health_check
   # PWA support
-  get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   # Products + nested competitor products
@@ -32,7 +31,7 @@ Rails.application.routes.draw do
 
   root "products#index"
 
-  # Sidekiq dashboard
+  # Sidekiq dashboard (UI)
   if Rails.env.development?
     mount Sidekiq::Web => '/sidekiq'
   end
